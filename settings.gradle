@@ -1,2 +1,2 @@
 rootProject.name = 'nms'
-
+include 'user-service'
