@@ -1,0 +1,79 @@
+version: '3.1'
+
+volumes:
+  cache:
+    driver: local
+
+services:
+
+  spring-cloud-service:
+    container_name: spring-cloud-service
+    image: spring-cloud-config
+    build:
+      context: ./spring-cloud-service
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+
+  postgres:
+    container_name: postgres
+    image: "postgres:15.1-alpine"
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_MULTIPLE_DATABASES=users
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+
+  user-service:
+    container_name: user-service
+    image: user-service
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - spring-cloud-service
+      - postgres
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/users
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    links:
+      - spring-cloud-service
+      - postgres
+
+  news-service:
+    container_name: news-service
+    image: news-service
+    build:
+      context: ./news-service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8090:8090"
+    depends_on:
+      - spring-cloud-service
+      - postgres
+      - user-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/users
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    links:
+      - spring-cloud-service
+      - postgres
+      - user-service
+  
+  redis:
+    image: redis:7.2.3-alpine
+    restart: always
+    container_name: redis-cache
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass cGFzc3dvcnRvcmVkaXM=
+    volumes:
+      - cache:/data

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/v0.0/ddl/2024-10-30--01-create-users-table.sql
+  - include:
+      file: liquibase/v0.0/ddl/2024-10-30--02-create-roles-table.sql
+  - include:
+      file: liquibase/v0.0/ddl/2024-10-30--03-create-user_roles-table.sql
+  - include:
+      file: liquibase/v0.0/dml/2024-03-01--01-insert-users-table.sql
+  - include:
+      file: liquibase/v0.0/dml/2024-03-01--02-insert-roles-table.sql
+  - include:
+      file: liquibase/v0.0/dml/2024-03-01--03-insert-user_roles-table.sql

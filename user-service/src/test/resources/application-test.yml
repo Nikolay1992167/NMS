@@ -1,0 +1,31 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+  cache:
+    type: none
+  datasource:
+    username: test
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  liquibase:
+    enabled: true
+    change-log: liquibase/db.changelog-master-test.yml
+security:
+  jwt:
+    secret: 73357638792F423F4528482B4D6251655468576D5A7133743677397A24432646ролоыщлврлоывалроывларолыва
+    access: 1
+    refresh: 2
+aop:
+  logging:
+    enabled: true
+exception:
+  handling:
+    enabled: true
