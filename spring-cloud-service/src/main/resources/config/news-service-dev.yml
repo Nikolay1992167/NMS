@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/users
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:87654321}
+  cache:
+    algorithm: lfu
+    size: 10
+  liquibase:
+    enabled: true
+    change-log: liquibase/db.changelog-master.yml
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+server:
+  port: ${SERVER_PORT:8090}
+urls:
+  userservice_url: http://localhost:8081/
+aop:
+  logging:
+    enabled: true
+exception:
+  handling:
+    enabled: true

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: news-service
+  profiles:
+    active: prod
+  config:
+    import: optional:configserver:http://spring-cloud-service:8888
